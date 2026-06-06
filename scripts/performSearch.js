@@ -18,7 +18,12 @@ const performSearch = (searchTerm, isUserSelected) => {
   setLoadingState(true);
 
   fetch(`${USER_API}${searchTerm}${typeQuery}`)
-    .then((result) => result.json())
+    .then((result) => {
+      if (!result.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return result.json();
+    })
     .then((respond) => setSearchResult(respond.items))
     .finally(() => setLoadingState(false));
 };
